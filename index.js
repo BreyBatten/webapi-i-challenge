@@ -39,7 +39,16 @@ server.get("/api/users/:id", (req, res) => {
 
 //POST
 server.post("/api/users", (req, res) => {
-    
+    const userInfo = req.body;
+    const { name, bio } = userInfo;
+
+    db.insert(name && bio)
+    .then(user => {
+        res.status(201).json({ success: true, user});
+    })
+    .catch(err => {
+        res.status(400).json({ success: false, err, error: "Please provide name and bio for the user."})
+    })
 })
 
 server.listen(4000, () => {
