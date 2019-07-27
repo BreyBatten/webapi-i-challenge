@@ -40,8 +40,9 @@ server.get("/api/users/:id", (req, res) => {
 //POST
 server.post("/api/users", (req, res) => {
     const { name, bio } = req.body;
-
-    db.insert(name && bio)
+    console.log(name, bio);
+    console.log(req.body);
+    db.insert({name, bio})
     .then(user => {
         res.status(201).json({ success: true, user});
     })
@@ -71,13 +72,12 @@ server.delete("/api/users/:id", (req, res) => {
 server.put("/api/users/:id", (req, res) => {
     const { id } = req.params;
     const { name, bio } = req.body;
-    const userInfo = req.body;
 
     if (!name || !bio) {
         res.status(400).json({ errorMessage: "Please provide a name and bio for the user." });
     }
 
-    db.update(id, userInfo)
+    db.update(id, { name, bio })
     .then(updated => {
         if (updated) {
             res.status(200).json({ success: true, updated });
